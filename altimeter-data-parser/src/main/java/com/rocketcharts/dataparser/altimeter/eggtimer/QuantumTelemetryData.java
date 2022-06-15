@@ -11,6 +11,9 @@ public class QuantumTelemetryData extends TelemetryData {
  
     public static final int COLUMNS = 11;
     public static final String HEADER = "T,Alt,Veloc,FAlt,FVeloc,LDA,LowV,Apogee,N-O,Drogue,Main";
+    protected static final String[] LABELS = {"Time", "Altitude", "Velocity", "Filtered Altitude", 
+                                            "Filtered Velocity", "Launch Detection Altitude", "Low Velocity",
+                                            "Apogee", "Nose Over", "Drogue", "Main"};
 
     public QuantumTelemetryData(double time, double altitude, double velocity, double fAltitude, double fVelocity) {
         super(time, altitude);
@@ -29,11 +32,17 @@ public class QuantumTelemetryData extends TelemetryData {
     }
 
     public static EventData parseEventData(String[] data) {
-        return new EventData(Integer.parseInt(data[5]), 
-                                    Integer.parseInt(data[6]),
-                                    Integer.parseInt(data[7]),
-                                    Integer.parseInt(data[8]),
-                                    Integer.parseInt(data[9]),
-                                    Integer.parseInt(data[10]) );
-    }
+        Double time = Double.parseDouble(data[0]);
+        Double eventData;
+        Double eventAltData = Double.parseDouble(data[3]);
+       
+        for(int i = 5; i < 11; i++) {
+            eventData = Double.parseDouble(data[i]);
+            if(eventData > 0) {
+                return new EventData(LABELS[i], time, eventData, eventAltData);
+            }
+        }
+
+        return null;
+     }
 }

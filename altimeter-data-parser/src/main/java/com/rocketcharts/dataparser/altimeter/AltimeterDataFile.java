@@ -2,6 +2,7 @@ package com.rocketcharts.dataparser.altimeter;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -46,12 +47,13 @@ public class AltimeterDataFile {
             return null;
         
         List<TelemetryData> flightData = Collections.emptyList();
-        EventData eventData = new EventData();
+        List<EventData> eventData = new ArrayList<>();
         Pattern pattern = Pattern.compile(",");
         try {
                 flightData = getReader().lines().skip(1).map(line -> {
                 String[] x = pattern.split(line);
-                eventData.merge(Altimeter.parseEventData(x, getModel()));
+                EventData ed = Altimeter.parseEventData(x, getModel());
+                if(ed != null) eventData.add(ed);
                 return Altimeter.parseData(x, getModel()); 
             }) .collect(Collectors.toList());
         } catch (Exception e) {

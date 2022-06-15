@@ -24,7 +24,7 @@ public class Flight {
     private AltimeterDataFile altimeterDataFile;
     private MetaData metaData;
     private List<TelemetryData> data;
-    private EventData eventData;
+    private List<EventData> eventData;
 
     public void readFile() {
         FlightData flightData = altimeterDataFile.parseFile();
@@ -48,11 +48,11 @@ public class Flight {
         this.metaData = metaData;
     }
 
-    public EventData getEventData() {
+    public List<EventData> getEventData() {
         return eventData;
     }
 
-    public void setEventData(EventData eventData) {
+    public void setEventData(List<EventData> eventData) {
         this.eventData = eventData;
     }
 }
