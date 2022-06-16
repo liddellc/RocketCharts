@@ -1,6 +1,8 @@
 package com.rocketcharts.dataparser;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.rocketcharts.dataparser.altimeter.AltimeterDataFile;
 
@@ -17,7 +19,7 @@ public class Flight {
             altimeterDataFile = new AltimeterDataFile(csvFile);
             altimeterDataFile.validateFile();
         } catch(Exception e) {
-            System.out.println(e.getMessage());
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Issue", e);
         }
    }
 

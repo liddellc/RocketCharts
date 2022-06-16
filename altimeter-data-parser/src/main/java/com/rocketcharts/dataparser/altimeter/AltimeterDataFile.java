@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -31,8 +33,7 @@ public class AltimeterDataFile {
         if (fileName == null)
             return false;
 
-        try {
-            FileReader fr = new FileReader(fileName);
+        try(FileReader fr = new FileReader(fileName)) {
             this.reader = new BufferedReader(fr);
             this.model = Altimeter.getAltimeter(reader.readLine());
 
@@ -57,7 +58,7 @@ public class AltimeterDataFile {
                 return Altimeter.parseData(x, getModel()); 
             }) .collect(Collectors.toList());
         } catch (Exception e) {
-            System.out.println("Error while reading data file ");            
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error while reading altimeter data file.", e);          
         }   
         
         return new FlightData(flightData, eventData);
