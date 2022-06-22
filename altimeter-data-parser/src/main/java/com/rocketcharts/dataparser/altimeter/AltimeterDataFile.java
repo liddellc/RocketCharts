@@ -33,7 +33,8 @@ public class AltimeterDataFile {
         if (fileName == null)
             return false;
 
-        try(FileReader fr = new FileReader(fileName)) {
+        try {
+            FileReader fr = new FileReader(fileName);
             this.reader = new BufferedReader(fr);
             this.model = Altimeter.getAltimeter(reader.readLine());
 
