@@ -1,12 +1,12 @@
 package com.rocketcharts.dataparser;
 
-import java.util.List;
+import java.util.Map;
 
 public class FlightData {
-    public final List<TelemetryData> data;
-    public final List<EventData> events;
+    public final Map<String, TelemetryData> data;
+    public final Map<String, EventData> events;
 
-    public FlightData(List<TelemetryData> data, List<EventData> events) {
+    public FlightData(Map<String, TelemetryData> data, Map<String, EventData> events) {
         this.data = data;
         this.events = events;
     }

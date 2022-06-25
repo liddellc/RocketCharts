@@ -1,6 +1,6 @@
 package com.rocketcharts.dataparser;
 
-import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,7 +13,7 @@ public class Flight {
 
      public Flight(String csvFile, MetaData metaData) {
         this.metaData = metaData;
-        this.data = null;
+        this.telemetryData = null;
 
         try {
             altimeterDataFile = new AltimeterDataFile(csvFile);
@@ -25,21 +25,21 @@ public class Flight {
 
     private AltimeterDataFile altimeterDataFile;
     private MetaData metaData;
-    private List<TelemetryData> data;
-    private List<EventData> eventData;
+    private Map<String, TelemetryData> telemetryData;
+    private Map<String, EventData> eventData;
 
     public void readFile() {
         FlightData flightData = altimeterDataFile.parseFile();
-        setData(flightData.data);
+        setTelemetryData(flightData.data);
         setEventData(flightData.events);
     }
 
-    public List<TelemetryData> getData() {
-        return data;
+    public Map<String, TelemetryData> getTelemetryData() {
+        return telemetryData;
     }
 
-    public void setData(List<TelemetryData> data) {
-        this.data = data;
+    public void setTelemetryData(Map<String, TelemetryData> telemetryData) {
+        this.telemetryData = telemetryData;
     }
 
     public MetaData getMetaData() {
@@ -50,11 +50,11 @@ public class Flight {
         this.metaData = metaData;
     }
 
-    public List<EventData> getEventData() {
+    public Map<String, EventData> getEventData() {
         return eventData;
     }
 
-    public void setEventData(List<EventData> eventData) {
+    public void setEventData(Map<String, EventData> eventData) {
         this.eventData = eventData;
     }
 }

@@ -39,9 +39,25 @@ public enum Altimeter {
         }
     }
 
+    public static String parseDataKey(String[] data, Altimeter a) {
+        if (a == ET_QUANTUM && data.length == ET_QUANTUM.columnCount) {
+            return QuantumTelemetryData.parseDataKey(data);
+         } else {
+            return null;
+        }
+    }
+
     public static EventData parseEventData(String[] data, Altimeter a) {
         if (a == ET_QUANTUM && data.length == ET_QUANTUM.columnCount) {
             return QuantumTelemetryData.parseEventData(data);
+         } else {
+            return null;
+        }
+    }
+
+    public static String parseEventDataKey(String[] data, Altimeter a) {
+        if (a == ET_QUANTUM && data.length == ET_QUANTUM.columnCount) {
+            return QuantumTelemetryData.parseEventDataKey(data);
          } else {
             return null;
         }

@@ -2,13 +2,11 @@ package com.rocketcharts.dataparser.altimeter;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import com.rocketcharts.dataparser.EventData;
 import com.rocketcharts.dataparser.FlightData;
@@ -34,8 +32,7 @@ public class AltimeterDataFile {
             return false;
 
         try {
-            FileReader fr = new FileReader(fileName);
-            this.reader = new BufferedReader(fr);
+            this.reader = new BufferedReader(new FileReader(fileName));
             this.model = Altimeter.getAltimeter(reader.readLine());
 
             return true;
@@ -48,16 +45,16 @@ public class AltimeterDataFile {
         if(model == null)
             return null;
         
-        List<TelemetryData> flightData = Collections.emptyList();
-        List<EventData> eventData = new ArrayList<>();
+        Map<String, TelemetryData> flightData = new HashMap<>();
+        Map<String, EventData> eventData = new HashMap<>();
         Pattern pattern = Pattern.compile(",");
         try {
-                flightData = getReader().lines().skip(1).map(line -> {
-                String[] x = pattern.split(line);
-                EventData ed = Altimeter.parseEventData(x, getModel());
-                if(ed != null) eventData.add(ed);
-                return Altimeter.parseData(x, getModel()); 
-            }) .collect(Collectors.toList());
+                getReader().lines().skip(1).forEach(line -> {
+                    String[] x = pattern.split(line);
+                    flightData.put(Altimeter.parseDataKey(x, getModel()), Altimeter.parseData(x, getModel()));
+                    String eventKey = Altimeter.parseEventDataKey(x, getModel());
+                    if (eventKey != null) eventData.put(eventKey, Altimeter.parseEventData(x, getModel()));
+                });
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error while reading altimeter data file.", e);          
         }   

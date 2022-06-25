@@ -24,21 +24,20 @@ public class QuantumTelemetryDataTest {
         String emptyString = "";
 
         Pattern pattern = Pattern.compile(",");
-        
+
         String[] goodData = pattern.split(goodString);
-        TelemetryData goodResult = Altimeter.parseData(goodData, Altimeter.ET_QUANTUM);
-        assertInstanceOf(QuantumTelemetryData.class, goodResult);
-        assertEquals(1.30, ((QuantumTelemetryData)goodResult).time);
-        assertEquals(211.00, ((QuantumTelemetryData)goodResult).altitude);
-        assertEquals(280.00, ((QuantumTelemetryData)goodResult).velocity);
-        assertEquals(167.76, ((QuantumTelemetryData)goodResult).fAltitude);
-        assertEquals(216.19, ((QuantumTelemetryData)goodResult).fVelocity);
+        QuantumTelemetryData goodResult = QuantumTelemetryData.parseData(goodData);
+        assertEquals(1.30, goodResult.time);
+        assertEquals(211.00, goodResult.altitude);
+        assertEquals(280.00, goodResult.velocity);
+        assertEquals(167.76, goodResult.fAltitude);
+        assertEquals(216.19, goodResult.fVelocity);
 
         String[] correctColumnBadData = pattern.split(correctColumnBadDataString);
-        assertThrows(NumberFormatException.class, () -> Altimeter.parseData(correctColumnBadData, Altimeter.ET_QUANTUM));
+        assertThrows(NumberFormatException.class, () -> QuantumTelemetryData.parseData(correctColumnBadData));
 
         String[] emptyStringData = pattern.split(emptyString);
-        assertNull(Altimeter.parseData(emptyStringData, Altimeter.ET_QUANTUM));
+        assertThrows(NumberFormatException.class, () -> QuantumTelemetryData.parseData(emptyStringData));
  
     }
 
@@ -50,12 +49,34 @@ public class QuantumTelemetryDataTest {
         Pattern pattern = Pattern.compile(",");
         
         String[] goodData = pattern.split(goodString);
-        EventData goodResult = Altimeter.parseEventData(goodData, Altimeter.ET_QUANTUM);
+        EventData goodResult = QuantumTelemetryData.parseEventData(goodData);
         assertEquals(211, goodResult.getData());
         assertEquals(167.76, goodResult.getAltData());
 
         String[] correctColumnBadData = pattern.split(correctColumnBadDataString);
-        assertThrows(NumberFormatException.class, () -> Altimeter.parseData(correctColumnBadData, Altimeter.ET_QUANTUM));
+        assertThrows(NumberFormatException.class, () -> QuantumTelemetryData.parseData(correctColumnBadData));
  
+    }
+
+    @Test
+    void testParseDataKey() {
+        String goodString = etQuantumData;
+
+        Pattern pattern = Pattern.compile(",");
+
+        String[] goodData = pattern.split(goodString);
+        String goodResult = QuantumTelemetryData.parseDataKey(goodData);
+        assertEquals("1.30", goodResult);
+    }
+
+    @Test
+    void testParseEventDataKey() {
+        String goodString = etQuantumData;
+
+        Pattern pattern = Pattern.compile(",");
+
+        String[] goodData = pattern.split(goodString);
+        String goodResult = QuantumTelemetryData.parseEventDataKey(goodData);
+        assertEquals("lda", goodResult);
     }
 }
