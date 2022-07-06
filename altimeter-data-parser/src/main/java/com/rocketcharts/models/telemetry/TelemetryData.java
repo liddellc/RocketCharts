@@ -1,4 +1,4 @@
-package com.rocketcharts.dataparser;
+package com.rocketcharts.models.telemetry;
 
 public class TelemetryData {
     public final double time;

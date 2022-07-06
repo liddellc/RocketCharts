@@ -1,22 +1,25 @@
-package com.rocketcharts.dataparser;
+package com.rocketcharts;
 
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.rocketcharts.dataparser.altimeter.AltimeterDataFile;
+import com.rocketcharts.models.EventData;
+import com.rocketcharts.models.FlightData;
+import com.rocketcharts.models.MetaData;
+import com.rocketcharts.models.telemetry.TelemetryData;
 
 public class Flight {
-    public Flight(String csvFile) {
-        this(csvFile, null);
+    public Flight(String projectId, String bucketName, String objectName) {
+        this(projectId, bucketName, objectName, null);
     }
 
-     public Flight(String csvFile, MetaData metaData) {
+     public Flight(String projectId, String bucketName, String objectName, MetaData metaData) {
         this.metaData = metaData;
         this.telemetryData = null;
 
         try {
-            altimeterDataFile = new AltimeterDataFile(csvFile);
+            altimeterDataFile = new AltimeterDataFile(projectId, bucketName, objectName);
             altimeterDataFile.validateFile();
         } catch(Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Issue", e);

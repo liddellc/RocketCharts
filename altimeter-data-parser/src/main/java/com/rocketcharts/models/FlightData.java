@@ -1,6 +1,8 @@
-package com.rocketcharts.dataparser;
+package com.rocketcharts.models;
 
 import java.util.Map;
+
+import com.rocketcharts.models.telemetry.TelemetryData;
 
 public class FlightData {
     public final Map<String, TelemetryData> data;

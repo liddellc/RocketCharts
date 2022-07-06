@@ -1,17 +1,13 @@
-package com.rocketcharts.dataparser.altimeter.eggtimer;
+package com.rocketcharts.models.telemetry;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Test;
 
-import com.rocketcharts.dataparser.EventData;
-import com.rocketcharts.dataparser.TelemetryData;
-import com.rocketcharts.dataparser.altimeter.Altimeter;
+import com.rocketcharts.models.EventData;
 
 public class QuantumTelemetryDataTest {
     String etQuantumHeader = "T,Alt,Veloc,FAlt,FVeloc,LDA,LowV,Apogee,N-O,Drogue,Main";

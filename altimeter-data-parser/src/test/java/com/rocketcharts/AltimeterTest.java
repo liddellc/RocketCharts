@@ -1,4 +1,4 @@
-package com.rocketcharts.dataparser.altimeter;
+package com.rocketcharts;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -8,9 +8,9 @@ import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Test;
 
-import com.rocketcharts.dataparser.EventData;
-import com.rocketcharts.dataparser.TelemetryData;
-import com.rocketcharts.dataparser.altimeter.eggtimer.QuantumTelemetryData;
+import com.rocketcharts.models.EventData;
+import com.rocketcharts.models.telemetry.TelemetryData;
+import com.rocketcharts.models.telemetry.QuantumTelemetryData;
 
 class AltimeterTest {
     String etQuantumHeader = "T,Alt,Veloc,FAlt,FVeloc,LDA,LowV,Apogee,N-O,Drogue,Main";

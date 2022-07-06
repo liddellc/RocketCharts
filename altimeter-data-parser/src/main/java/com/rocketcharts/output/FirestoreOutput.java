@@ -1,4 +1,4 @@
-package com.rocketcharts.dataparser.output;
+package com.rocketcharts.output;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -9,7 +9,7 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.WriteResult;
-import com.rocketcharts.dataparser.Flight;
+import com.rocketcharts.Flight;
 
 public class FirestoreOutput {
     private Firestore firestoreDB;

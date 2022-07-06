@@ -1,4 +1,4 @@
-package com.rocketcharts.dataparser.altimeter;
+package com.rocketcharts;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

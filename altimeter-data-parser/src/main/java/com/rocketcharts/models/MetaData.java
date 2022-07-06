@@ -1,4 +1,4 @@
-package com.rocketcharts.dataparser;
+package com.rocketcharts.models;
 
 import java.util.Date;
 

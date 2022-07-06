@@ -1,26 +1,34 @@
-package com.rocketcharts.dataparser.altimeter;
+package com.rocketcharts;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.nio.channels.Channels;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import com.rocketcharts.dataparser.EventData;
-import com.rocketcharts.dataparser.FlightData;
-import com.rocketcharts.dataparser.InvalidAltimeterException;
-import com.rocketcharts.dataparser.TelemetryData;
+import com.google.cloud.ReadChannel;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
+import com.rocketcharts.models.EventData;
+import com.rocketcharts.models.FlightData;
+import com.rocketcharts.exceptions.InvalidAltimeterException;
+import com.rocketcharts.models.telemetry.TelemetryData;
 
 public class AltimeterDataFile {
 
-    private String fileName;
+    private String projectId;
+    private String bucketName;
+    private String objectName;
     private Altimeter model;
     private BufferedReader reader;
 
-    public AltimeterDataFile(String fileName) throws InvalidAltimeterException {
-        this.fileName = fileName;
+    public AltimeterDataFile(String projectId, String bucketName, String objectName) throws InvalidAltimeterException {
+        this.projectId = projectId;
+        this.bucketName = bucketName;
+        this.objectName = objectName;
 
         if (!validateFile()) {
             throw new InvalidAltimeterException("Altimeter data file is not recoginzed/supported.");
@@ -28,13 +36,16 @@ public class AltimeterDataFile {
     }
     
     public boolean validateFile() {
-        if (fileName == null)
+        if (projectId == null || bucketName == null || objectName == null)
             return false;
 
         try {
-            this.reader = new BufferedReader(new FileReader(fileName));
-            this.model = Altimeter.getAltimeter(reader.readLine());
+            Storage storage = StorageOptions.newBuilder().setProjectId(projectId).build().getService();
+            ReadChannel sReader = storage.reader(BlobId.of(bucketName, objectName));
+            reader = new BufferedReader(Channels.newReader(sReader, "UTF8"));
 
+            model = Altimeter.getAltimeter(reader.readLine());
+            
             return true;
         } catch (Exception e) {
             return false;
@@ -63,14 +74,30 @@ public class AltimeterDataFile {
     }
 
     // getters and setters
-    public String getFileName() {
-        return fileName;
+    public String getProjectId() {
+        return projectId;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public String getBucketName() {
+        return bucketName;
     }
 
+    public String getObjectName() {
+        return objectName;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
+    public void setBucketName(String bucketName) {
+        this.bucketName = bucketName;
+    }
+
+    public void setObjectName(String objectName) {
+        this.objectName = objectName;
+    }
+    
     public Altimeter getModel() {
         return model;
     }

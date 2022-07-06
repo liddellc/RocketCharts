@@ -1,7 +1,6 @@
-package com.rocketcharts.dataparser.altimeter.eggtimer;
+package com.rocketcharts.models.telemetry;
 
-import com.rocketcharts.dataparser.EventData;
-import com.rocketcharts.dataparser.TelemetryData;
+import com.rocketcharts.models.EventData;
 
 public class QuantumTelemetryData extends TelemetryData {
 

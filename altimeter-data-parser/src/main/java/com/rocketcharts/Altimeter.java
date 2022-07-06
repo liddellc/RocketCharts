@@ -1,10 +1,10 @@
-package com.rocketcharts.dataparser.altimeter;
+package com.rocketcharts;
 
 import java.util.regex.Pattern;
 
-import com.rocketcharts.dataparser.EventData;
-import com.rocketcharts.dataparser.TelemetryData;
-import com.rocketcharts.dataparser.altimeter.eggtimer.QuantumTelemetryData;
+import com.rocketcharts.models.EventData;
+import com.rocketcharts.models.telemetry.TelemetryData;
+import com.rocketcharts.models.telemetry.QuantumTelemetryData;
 
 public enum Altimeter {
     ET_QUANTUM(QuantumTelemetryData.COLUMNS, QuantumTelemetryData.HEADER),

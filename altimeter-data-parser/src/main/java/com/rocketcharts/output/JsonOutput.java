@@ -1,4 +1,4 @@
-package com.rocketcharts.dataparser.output;
+package com.rocketcharts.output;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.rocketcharts.dataparser.Flight;
+import com.rocketcharts.Flight;
 
 public class JsonOutput {
     private String fileName;
