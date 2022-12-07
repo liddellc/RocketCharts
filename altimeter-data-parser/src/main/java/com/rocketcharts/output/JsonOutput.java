@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.rocketcharts.Flight;
+import com.rocketcharts.models.FlightData;
 
 public class JsonOutput {
     private String fileName;
@@ -15,34 +15,38 @@ public class JsonOutput {
 
     public JsonOutput(String fileName) {
         File f = new File(fileName.replace(".csv", ".json"));
-        try{
+        try {
             fileWriter = new FileWriter(f);
-        } catch(Exception e) {
+        } catch (Exception e) {
             handleException(e);
         }
 
     }
 
-    public boolean write(Flight flight) {
+    public boolean write(FlightData flightData) {
         boolean result = true;
 
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
-            mapper.writeValue(fileWriter, flight);    
-        }
-        catch(Exception e) {
+            mapper.writeValue(fileWriter, flightData);
+        } catch (Exception e) {
             handleException(e);
             result = false;
         }
 
         return result;
     }
- 
+
     private void handleException(Exception e) {
         Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error while writing JSON data.", e);
     }
 
-    public String getFileName() { return fileName; }
-    public FileWriter getFileWriter() { return fileWriter; }
+    public String getFileName() {
+        return fileName;
+    }
+
+    public FileWriter getFileWriter() {
+        return fileWriter;
+    }
 }

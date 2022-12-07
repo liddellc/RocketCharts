@@ -1,109 +1,75 @@
 package com.rocketcharts;
 
 import java.io.BufferedReader;
-import java.nio.channels.Channels;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import com.google.cloud.ReadChannel;
-import com.google.cloud.storage.BlobId;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
 import com.rocketcharts.models.EventData;
 import com.rocketcharts.models.FlightData;
+import com.rocketcharts.models.MetaData;
+import com.rocketcharts.models.altimeter.Altimeter;
+import com.rocketcharts.models.altimeter.AltimeterFactory;
 import com.rocketcharts.exceptions.InvalidAltimeterException;
 import com.rocketcharts.models.telemetry.TelemetryData;
 
 public class AltimeterDataFile {
 
-    private String projectId;
-    private String bucketName;
-    private String objectName;
-    private Altimeter model;
+    private Altimeter altimeter;
     private BufferedReader reader;
 
-    public AltimeterDataFile(String projectId, String bucketName, String objectName) throws InvalidAltimeterException {
-        this.projectId = projectId;
-        this.bucketName = bucketName;
-        this.objectName = objectName;
-
-        if (!validateFile()) {
-            throw new InvalidAltimeterException("Altimeter data file is not recoginzed/supported.");
-        }
-    }
-    
-    public boolean validateFile() {
-        if (projectId == null || bucketName == null || objectName == null)
-            return false;
-
+    public AltimeterDataFile(BufferedReader reader) throws InvalidAltimeterException {
+        this.reader = reader;
         try {
-            Storage storage = StorageOptions.newBuilder().setProjectId(projectId).build().getService();
-            ReadChannel sReader = storage.reader(BlobId.of(bucketName, objectName));
-            reader = new BufferedReader(Channels.newReader(sReader, "UTF8"));
-
-            model = Altimeter.getAltimeter(reader.readLine());
-            
-            return true;
-        } catch (Exception e) {
-            return false;
+            this.altimeter = AltimeterFactory.getAltimeter(reader.readLine());
+        } catch (IOException e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Issue", e);
         }
+        if (this.altimeter == null)
+            throw new InvalidAltimeterException("Altimeter data file unsupported");
     }
 
     public FlightData parseFile() {
-        if(model == null)
-            return null;
-        
         Map<String, TelemetryData> flightData = new HashMap<>();
         Map<String, EventData> eventData = new HashMap<>();
         Pattern pattern = Pattern.compile(",");
         try {
-                getReader().lines().skip(1).forEach(line -> {
-                    String[] x = pattern.split(line);
-                    flightData.put(Altimeter.parseDataKey(x, getModel()), Altimeter.parseData(x, getModel()));
-                    String eventKey = Altimeter.parseEventDataKey(x, getModel());
-                    if (eventKey != null) eventData.put(eventKey, Altimeter.parseEventData(x, getModel()));
-                });
+            getReader().lines().skip(1).forEach(line -> {
+                String[] sData = pattern.split(line);
+                TelemetryData tData = altimeter.getTelemetryData(sData);
+                flightData.put(sData[0], tData);
+                EventData eData = altimeter.getEventData(sData);
+                if (eData != null)
+                    eventData.put(altimeter.getEventDataKey(sData), eData);
+            });
         } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error while reading altimeter data file.", e);          
-        }   
-        
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error while reading altimeter data file.", e);
+        }
+
         return new FlightData(flightData, eventData);
     }
 
+    public MetaData parseMetaDataFromFilename(String fileName) {
+        MetaData metaData = null;
+        // pull data from file name if it matches the format
+        String[] fields = fileName.split("_");
+        if (fields.length == 4) {
+            metaData = new MetaData(fields[0], "", fields[1], fields[3]);
+        }
+
+        return metaData;
+    }
+
     // getters and setters
-    public String getProjectId() {
-        return projectId;
+    public Altimeter getAltimeter() {
+        return altimeter;
     }
 
-    public String getBucketName() {
-        return bucketName;
-    }
-
-    public String getObjectName() {
-        return objectName;
-    }
-
-    public void setProjectId(String projectId) {
-        this.projectId = projectId;
-    }
-
-    public void setBucketName(String bucketName) {
-        this.bucketName = bucketName;
-    }
-
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
-    }
-    
-    public Altimeter getModel() {
-        return model;
-    }
-
-    public void setModel(Altimeter model) {
-        this.model = model;
+    public void setAltimeter(Altimeter altimeter) {
+        this.altimeter = altimeter;
     }
 
     public BufferedReader getReader() {

@@ -9,35 +9,33 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.WriteResult;
-import com.rocketcharts.Flight;
+import com.rocketcharts.models.FlightData;
 
 public class FirestoreOutput {
     private Firestore firestoreDB;
-    
+
     public FirestoreOutput(String projectId) {
         FirestoreOptions firestoreOptions;
         try {
             firestoreOptions = FirestoreOptions.getDefaultInstance().toBuilder()
-                .setProjectId(projectId)
-                .setCredentials(GoogleCredentials.getApplicationDefault())
-                .build();
+                    .setProjectId(projectId)
+                    .setCredentials(GoogleCredentials.getApplicationDefault())
+                    .build();
             firestoreDB = firestoreOptions.getService();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             handleException(e);
         }
     }
 
-    public boolean write(Flight flight) {
+    public boolean write(FlightData flightData) {
         boolean result = true;
 
         try {
             DocumentReference docRef = firestoreDB.collection("flights").document();
-            //asynchronously write data
-            ApiFuture<WriteResult> wResult = docRef.set(flight);
+            // asynchronously write data
+            ApiFuture<WriteResult> wResult = docRef.set(flightData);
             Logger.getLogger(getClass().getName()).info("Update time : " + wResult.get().getUpdateTime());
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             handleException(e);
             Thread.currentThread().interrupt();
             result = false;
@@ -50,5 +48,7 @@ public class FirestoreOutput {
         Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error while writing data to Firestore DB.", e);
     }
 
-    public Firestore getFirestoreDB() { return firestoreDB; }
+    public Firestore getFirestoreDB() {
+        return firestoreDB;
+    }
 }
