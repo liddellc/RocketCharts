@@ -1,4 +1,4 @@
-package com.rocketcharts.models.altimeter;
+package com.rocketcharts.altimeter;
 
 public class AltimeterFactory {
     private AltimeterFactory() {

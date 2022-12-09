@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
 import com.rocketcharts.models.EventData;
 import com.rocketcharts.models.FlightData;
 import com.rocketcharts.models.MetaData;
-import com.rocketcharts.models.altimeter.Altimeter;
-import com.rocketcharts.models.altimeter.AltimeterFactory;
+import com.rocketcharts.altimeter.Altimeter;
+import com.rocketcharts.altimeter.AltimeterFactory;
 import com.rocketcharts.exceptions.InvalidAltimeterException;
 import com.rocketcharts.models.telemetry.TelemetryData;
 
@@ -37,7 +37,7 @@ public class AltimeterDataFile {
         Map<String, EventData> eventData = new HashMap<>();
         Pattern pattern = Pattern.compile(",");
         try {
-            getReader().lines().skip(1).forEach(line -> {
+            getReader().lines().forEach(line -> {
                 String[] sData = pattern.split(line);
                 TelemetryData tData = altimeter.getTelemetryData(sData);
                 flightData.put(sData[0], tData);
@@ -55,7 +55,7 @@ public class AltimeterDataFile {
     public MetaData parseMetaDataFromFilename(String fileName) {
         MetaData metaData = null;
         // pull data from file name if it matches the format
-        String[] fields = fileName.split("_");
+        String[] fields = fileName.split("\\.")[0].split("_");
         if (fields.length == 4) {
             metaData = new MetaData(fields[0], "", fields[1], fields[3]);
         }

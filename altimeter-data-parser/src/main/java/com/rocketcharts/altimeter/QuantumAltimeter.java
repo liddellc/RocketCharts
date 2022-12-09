@@ -1,4 +1,4 @@
-package com.rocketcharts.models.altimeter;
+package com.rocketcharts.altimeter;
 
 import com.rocketcharts.models.EventData;
 import com.rocketcharts.models.telemetry.QuantumTelemetryData;
