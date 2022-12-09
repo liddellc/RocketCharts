@@ -32,8 +32,8 @@ public class AltimeterDataFileTest {
         try {
             AltimeterDataFile dataFile = new AltimeterDataFile(reader);
             FlightData fData = dataFile.parseFile();
-            assertEquals(1.3, fData.data.get("1.30").getTime());
-            assertEquals(1.3, fData.events.get("lda").getTime());
+            assertEquals(1.3, fData.telemetryData.get("1.30").getTime());
+            assertEquals(1.3, fData.eventData.get("lda").getTime());
             assert (true);
         } catch (InvalidAltimeterException e) {
             e.printStackTrace();

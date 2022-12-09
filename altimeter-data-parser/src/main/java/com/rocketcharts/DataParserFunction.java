@@ -44,7 +44,7 @@ public class DataParserFunction implements BackgroundFunction<GcsEvent> {
       try {
         altDataFile = new AltimeterDataFile(getReader(projectId, event.getBucket(), event.getName()));
         FlightData flightData = altDataFile.parseFile();
-        flightData.setMeta(altDataFile.parseMetaDataFromFilename(event.getName().substring(prefix.length())));
+        flightData.setMetaData(altDataFile.parseMetaDataFromFilename(event.getName().substring(prefix.length())));
 
         FirestoreOutput fsOutput = new FirestoreOutput(projectId);
         fsOutput.write(flightData);

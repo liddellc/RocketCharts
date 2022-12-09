@@ -31,29 +31,34 @@ public class QuantumAltimeter implements Altimeter {
 
     @Override
     public EventData getEventData(String[] data) {
-        EventData eventData = new EventData();
+        Double time = Double.parseDouble(data[0]);
+        Double eventAltData = Double.parseDouble(data[3]);
 
-        // event data only occurs once per line so if we find a value we're done
-        for (int i = EVENT_DATA_START_COL; i <= EVENT_DATA_END_COL; i++) {
-            Double value = Double.parseDouble(data[i]);
-            if (value > 0) {
-                eventData.setTime(Double.parseDouble(data[0]));
-                eventData.setName(DESCRIPTION_STRINGS[i]);
-                eventData.setData(value);
-                eventData.setAltData(Double.parseDouble(data[3]));
-                break;
-            }
-        }
+        Integer result = findEventData(data);
 
-        return eventData;
+        if (result != null)
+            return new EventData(DESCRIPTION_STRINGS[result], time, Double.parseDouble(data[result]), eventAltData);
+        else
+            return null;
     }
 
     @Override
     public String getEventDataKey(String[] data) {
+        Integer result = findEventData(data);
+
+        if (result != null)
+            return LABEL_STRINGS[result];
+        else
+            return null;
+    }
+
+    private static Integer findEventData(String[] data) {
+        Double eventData;
+
         for (int i = EVENT_DATA_START_COL; i <= EVENT_DATA_END_COL; i++) {
-            Double value = Double.parseDouble(data[i]);
-            if (value > 0) {
-                return LABEL_STRINGS[i];
+            eventData = Double.parseDouble(data[i]);
+            if (eventData > 0) {
+                return i;
             }
         }
 
@@ -63,5 +68,4 @@ public class QuantumAltimeter implements Altimeter {
     public static boolean isMatch(String firstLine) {
         return firstLine.equals(HEADER);
     }
-
 }
