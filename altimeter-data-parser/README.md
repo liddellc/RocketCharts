@@ -20,7 +20,7 @@ For more information on how to create your application credentials file visit [t
 To run the cloud function locally execute the following command. This uses the [Function Framework for Java](https://github.com/GoogleCloudPlatform/functions-framework-java#configuration-on-the-command-line) to run a local web server that listens for cloud events.
 
 ```
-mvn com.google.cloud.functions:function-maven-plugin:0.10.0:run -Drun.functionTarget=com.rocketcharts.DataParserFunction`
+mvn function:run
 ```
 
 ## Upload a file to Cloud Storage
