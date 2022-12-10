@@ -10,5 +10,5 @@ public interface Altimeter {
 
     public EventData getEventData(String[] data);
 
-    public String getEventDataKey(String[] data);
+    public String getEventKey(String[] data);
 }

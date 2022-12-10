@@ -43,7 +43,7 @@ public class AltimeterDataFile {
                 flightData.put(sData[0], tData);
                 EventData eData = altimeter.getEventData(sData);
                 if (eData != null)
-                    eventData.put(altimeter.getEventDataKey(sData), eData);
+                    eventData.put(altimeter.getEventKey(sData), eData);
             });
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error while reading altimeter data file.", e);

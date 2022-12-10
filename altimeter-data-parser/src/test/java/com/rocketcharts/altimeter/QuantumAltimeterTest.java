@@ -34,8 +34,8 @@ public class QuantumAltimeterTest {
     }
 
     @Test
-    void testGetEventDataKey() {
-        assertEquals("lda", alt.getEventDataKey(data));
+    void testGetEventKey() {
+        assertEquals("lda", alt.getEventKey(data));
     }
 
     @Test

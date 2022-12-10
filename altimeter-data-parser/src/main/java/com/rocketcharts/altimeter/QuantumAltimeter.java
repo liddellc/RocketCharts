@@ -43,7 +43,7 @@ public class QuantumAltimeter implements Altimeter {
     }
 
     @Override
-    public String getEventDataKey(String[] data) {
+    public String getEventKey(String[] data) {
         Integer result = findEventData(data);
 
         if (result != null)
