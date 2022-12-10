@@ -10,6 +10,8 @@ public class AltimeterFactory {
 
         if (QuantumAltimeter.isMatch(firstLine))
             return new QuantumAltimeter();
+        else if (ProtonAltimeter.isMatch(firstLine))
+            return new ProtonAltimeter();
         else
             return null;
     }
