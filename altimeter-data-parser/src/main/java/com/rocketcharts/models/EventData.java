@@ -2,27 +2,34 @@ package com.rocketcharts.models;
 
 public class EventData {
     // events
-    private String name;
+    private String label;
+    private String desc;
     private Double time;
     private Double data;
     private Double altData;
 
     public EventData() {
-        this.name = null;
+        this.label = null;
+        this.desc = null;
         this.time = null;
         this.data = null;
         this.altData = null;
     }
 
-    public EventData(String name, Double time, Double data, Double altData) {
-        this.name = name;
+    public EventData(String label, String desc, Double time, Double data, Double altData) {
+        this.label = label;
+        this.desc = desc;
         this.time = time;
         this.data = data;
         this.altData = altData;
     }
 
-    public String getName() {
-        return name;
+    public String getLabel() {
+        return label;
+    }
+
+    public String getDesc() {
+        return desc;
     }
 
     public Double getTime() {
@@ -37,8 +44,12 @@ public class EventData {
         return altData;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     public void setTime(Double time) {

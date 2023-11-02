@@ -1,15 +1,15 @@
 package com.rocketcharts.models;
 
-import java.util.Map;
+import java.util.List;
 
 import com.rocketcharts.models.telemetry.TelemetryData;
 
 public class FlightData {
-    public final Map<String, TelemetryData> telemetryData;
-    public final Map<String, EventData> eventData;
+    public final List<TelemetryData> telemetryData;
+    public final List<EventData> eventData;
     private MetaData metaData;
 
-    public FlightData(Map<String, TelemetryData> telemetryData, Map<String, EventData> eventData) {
+    public FlightData(List<TelemetryData> telemetryData, List<EventData> eventData) {
         this.telemetryData = telemetryData;
         this.eventData = eventData;
         this.metaData = null;

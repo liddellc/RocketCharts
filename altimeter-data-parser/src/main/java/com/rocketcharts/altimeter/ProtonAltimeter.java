@@ -1,25 +1,65 @@
 package com.rocketcharts.altimeter;
 
-import com.rocketcharts.models.EventData;
 import com.rocketcharts.models.telemetry.ProtonTelemetryData;
 import com.rocketcharts.models.telemetry.TelemetryData;
 
-public class ProtonAltimeter implements Altimeter {
-    protected static final String HEADER = "T,Alt,Veloc,AccelG,AccelFPSS,VAccel,AltAccel,Filt_Alt,FVeloc,FAccelG,FAccelFPSS,FAccelVel,FAccelAlt,LDA,MaxV,MaxA,BO#1,LowV,Apogee,N-O,CH1,CH2";
+public class ProtonAltimeter extends Altimeter {
 
-    protected static final String[] LABEL_STRINGS = { "time", "alt", "vel", "accelG", "accelFPSS", "velAcc", "altAcc",
-            "fAlt", "fVel", "fAccelG", "fAccelFPSS", "fVelAcc", "fAltAcc", "lda",
-            "maxV", "maxA", "bo1", "lowV", "apo", "no", "dro", "main" };
-    protected static final String[] DESCRIPTION_STRINGS = { "Time", "Altitude", "Velocity", "Acceleration Gs",
-            "Acceleration FPSS", "Velocity (Accelerometer)", "Altitude (Accelerometer)", "Filtered Altitude",
-            "Filtered Velocity", "Filtered Acceleration Gs", "Filtered Acceleration FPSS",
-            "Filtered Velocity (Accelerometer)",
-            "Filtered Altitude (Accelerometer)", "Launch Detection Altitude", "Max Velocity", "Max Aacceleration",
-            "Boost #1", "Low Velocity",
-            "Apogee", "Nose Over", "Drogue", "Main" };
-
-    private static final int EVENT_DATA_START_COL = 13;
-    private static final int EVENT_DATA_END_COL = 21;
+    public ProtonAltimeter() {
+        this.setHeader(
+                "T,Alt,Veloc,AccelG,AccelFPSS,VAccel,AltAccel,Filt_Alt,FVeloc,FAccelG,FAccelFPSS,FAccelVel,FAccelAlt,LDA,MaxV,MaxA,BO#1,LowV,Apogee,N-O,CH1,CH2");
+        this.setLabels(new String[] {
+                "time",
+                "alt",
+                "vel",
+                "accelG",
+                "accelFPSS",
+                "velAcc",
+                "altAcc",
+                "fAlt",
+                "fVel",
+                "fAccelG",
+                "fAccelFPSS",
+                "fVelAcc",
+                "fAltAcc",
+                "lda",
+                "maxV",
+                "maxA",
+                "bo1",
+                "lowV",
+                "apo",
+                "no",
+                "dro",
+                "main" });
+        this.setDescriptions(new String[] {
+                "Time",
+                "Altitude",
+                "Velocity",
+                "Acceleration Gs",
+                "Acceleration FPSS",
+                "Velocity (Accelerometer)",
+                "Altitude (Accelerometer)",
+                "Filtered Altitude",
+                "Filtered Velocity",
+                "Filtered Acceleration Gs",
+                "Filtered Acceleration FPSS",
+                "Filtered Velocity (Accelerometer)",
+                "Filtered Altitude (Accelerometer)",
+                "Launch Detection Altitude",
+                "Max Velocity",
+                "Max Aacceleration",
+                "Boost #1",
+                "Low Velocity",
+                "Apogee",
+                "Nose Over",
+                "Drogue",
+                "Main" });
+        this.setDataCol(1);
+        this.setTimeCol(0);
+        this.setFiltDataCol(7);
+        this.setEventDataStartCol(13);
+        this.setEventDataEndCol(21);
+    }
 
     @Override
     public TelemetryData getTelemetryData(String[] data) {
@@ -42,43 +82,4 @@ public class ProtonAltimeter implements Altimeter {
         return telemetryData;
     }
 
-    @Override
-    public EventData getEventData(String[] data) {
-        Double time = Double.parseDouble(data[0]);
-        Double eventAltData = Double.parseDouble(data[7]);
-
-        Integer result = findEventData(data);
-
-        if (result != null)
-            return new EventData(DESCRIPTION_STRINGS[result], time, Double.parseDouble(data[result]), eventAltData);
-        else
-            return null;
-    }
-
-    @Override
-    public String getEventKey(String[] data) {
-        Integer result = findEventData(data);
-
-        if (result != null)
-            return LABEL_STRINGS[result];
-        else
-            return null;
-    }
-
-    private static Integer findEventData(String[] data) {
-        Double eventData;
-
-        for (int i = EVENT_DATA_START_COL; i <= EVENT_DATA_END_COL; i++) {
-            eventData = Double.parseDouble(data[i]);
-            if (eventData > 0) {
-                return i;
-            }
-        }
-
-        return null;
-    }
-
-    public static boolean isMatch(String firstLine) {
-        return firstLine.equals(HEADER);
-    }
 }

@@ -11,7 +11,7 @@ import com.rocketcharts.exceptions.InvalidAltimeterException;
 import com.rocketcharts.models.FlightData;
 import com.rocketcharts.models.MetaData;
 
-public class AltimeterDataFileTest {
+class AltimeterDataFileTest {
     protected static final String QUANTUM_HEADER = "T,Alt,Veloc,FAlt,FVeloc,LDA,LowV,Apogee,N-O,Drogue,Main";
     protected static final String QUANTUM_DATA = "1.30,211.00,280.00,167.76,216.19,211,0,0,0,0,0";
     protected static final String FILENAME = "2020-07-18_Scorpion_on_I245G.csv";
@@ -32,8 +32,8 @@ public class AltimeterDataFileTest {
         try {
             AltimeterDataFile dataFile = new AltimeterDataFile(reader);
             FlightData fData = dataFile.parseFile();
-            assertEquals(1.3, fData.telemetryData.get("1.30").getTime());
-            assertEquals(1.3, fData.eventData.get("lda").getTime());
+            assertEquals(1.3, fData.telemetryData.get(0).getTime());
+            assertEquals(1.3, fData.eventData.get(0).getTime());
             assert (true);
         } catch (InvalidAltimeterException e) {
             e.printStackTrace();

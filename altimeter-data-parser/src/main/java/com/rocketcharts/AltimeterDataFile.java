@@ -2,8 +2,8 @@ package com.rocketcharts;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -24,7 +24,8 @@ public class AltimeterDataFile {
     public AltimeterDataFile(BufferedReader reader) throws InvalidAltimeterException {
         this.reader = reader;
         try {
-            this.altimeter = AltimeterFactory.getAltimeter(reader.readLine());
+            AltimeterFactory af = new AltimeterFactory();
+            this.altimeter = af.getAltimeter(reader.readLine());
         } catch (IOException e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Issue", e);
         }
@@ -33,17 +34,17 @@ public class AltimeterDataFile {
     }
 
     public FlightData parseFile() {
-        Map<String, TelemetryData> flightData = new HashMap<>();
-        Map<String, EventData> eventData = new HashMap<>();
+        List<TelemetryData> flightData = new ArrayList<>();
+        List<EventData> eventData = new ArrayList<>();
         Pattern pattern = Pattern.compile(",");
         try {
             getReader().lines().forEach(line -> {
                 String[] sData = pattern.split(line);
                 TelemetryData tData = altimeter.getTelemetryData(sData);
-                flightData.put(sData[0], tData);
+                flightData.add(tData);
                 EventData eData = altimeter.getEventData(sData);
                 if (eData != null)
-                    eventData.put(altimeter.getEventKey(sData), eData);
+                    eventData.add(eData);
             });
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error while reading altimeter data file.", e);
